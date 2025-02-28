@@ -9,7 +9,6 @@ class ResponseEmitter
   public function emit(ResponseInterface $response): void
   {
     // Headers de sécurité par défaut
-    //  ces headers supplémentaires sont particulièrement importants en production, mais peuvent être utiles même en développement pour détecter tôt d'éventuels problèmes de sécurité.
     $defaultHeaders = [
       'X-Content-Type-Options' => 'nosniff',
       'X-Frame-Options' => 'DENY',
