@@ -33,8 +33,8 @@ try {
   $controller = new $route['controller']();
   $method = $route['method'];
 
-  // Exécution de la méthode et émission de la réponse
-  $response = $controller->$method($request);
+  // On passe les paramètres en second argument
+  $response = $controller->$method($request, $route['params'] ?? []);
   $emitter->emit($response);
 } catch (RouteNotFoundException $e) {
   // Gestion de l'erreur 404
