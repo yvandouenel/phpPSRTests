@@ -1,0 +1,1 @@
+Ajout d'un middleware que récupère un utilisateur dans un fichier json ou fichier de config ?
