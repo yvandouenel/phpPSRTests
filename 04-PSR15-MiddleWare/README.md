@@ -33,24 +33,36 @@ Cette approche :
  - Se rapproche conceptuellement de l'approche Node.js et c'est l'approche adoptée par plusieurs frameworks PHP modernes comme Slim ou Laminas (ex-Zend).
 
  # Middleware
-Dans cette version, nous ajoutons un middleware d'authentification selon le principe des middlewares PSR-15 (PHP Standard Recommendation).
-Les middlewares PSR en PHP (PSR-15) sont des composants logiciels qui traitent les requêtes HTTP et les réponses de manière séquentielle. Chaque middleware peut :
+Dans cette version, nous ajoutons un middleware de "nettoyage" des entrées `InputSanitizerMiddleware`
 
-- Examiner/modifier la requête entrante
-- Examiner/modifier la réponse sortante
-- Passer l'exécution au middleware suivant
+- Objectif principal : Nettoyer et valider les données entrantes pour prévenir les injections et les attaques XSS
+- Fonctionnement :
 
-Le mécanisme "next" est fondamental : chaque middleware reçoit un callable $next qu'il peut invoquer pour passer le contrôle au middleware suivant dans la chaîne. Si un middleware n'appelle pas $next, le traitement s'arrête.
-Cette architecture permet de créer des `pipelines` de traitement modulaires pour l'authentification, la journalisation, la compression, etc.
+  - Intercepte les requêtes POST, PUT ou PATCH
+  - Filtre les données soumises via les formulaires et le corps de la requête
+  - Applique des fonctions de nettoyage comme strip_tags() et htmlspecialchars()
+  - Supprime les caractères potentiellement dangereux
 
-Pour cela nous allons : 
-- Créer  un dossier Middleware 
-- Créez une interface pour standardiser les middlewares - cf src/Middleware/MiddlewareInterface.php
-- Créez un middleware d'authentification - cf src/Middleware/AuthMiddleware.php
-- Créez un gestionnaire de middleware pour exécuter une chaîne de middlewares - cf src/Middleware/MiddlewareHandler.php
-- Modifier le fichier `src/Middleware/Router.php` pour y ajouter la gestion des middlewares
-- Modifier le fichier `src/Middleware/Route.php` pour y ajouter la gestion des middlewares
-- Modifier le fichier `index.php` pour y ajouter l'utilisation des middlewares et démarrer une session PHP pour permettre l'authentification basée sur session.
+
+- Avantages :
+
+  - Centralise la logique de sécurité des données entrantes
+  - Évite la duplication de code de validation dans chaque contrôleur
+  - Applique systématiquement les mêmes règles de sécurité à toutes les requêtes
+
+
+- Position dans la chaîne :
+
+  -  S'exécute généralement au début de la chaîne de middlewares
+  -  Agit avant que les données ne soient traitées par d'autres middlewares ou le contrôleur
+
+
+- Cas d'usage :
+
+  - Formulaires utilisateur (inscription, contact)
+  - APIs recevant des données JSON
+  - Upload de fichiers (vérification des extensions et types MIME)
+
 
 Le flux d'exécution est le suivant :
 
