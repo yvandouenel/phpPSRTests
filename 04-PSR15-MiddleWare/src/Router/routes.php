@@ -3,9 +3,7 @@
 use Diginamic\Framework\Controller\HomeController;
 use Diginamic\Framework\Controller\FirstController;
 use Diginamic\Framework\Controller\AdminController;
-use Diginamic\Framework\Middleware\AuthMiddleware;
-// use Diginamic\Framework\Middleware\LoggingMiddleware;
-// use Diginamic\Framework\Middleware\CsrfMiddleware;
+use Diginamic\Framework\Controller\ContactController;
 
 /**
  * Fichier de configuration des routes
@@ -45,7 +43,7 @@ return [
     'httpMethod' => 'GET',
     'params' => [],
     'middlewares' => [
-      // new AuthMiddleware(['/admin'])  // Ceci n'est pas nécessaire car la liste a été ajoutée en ligne 20 de l'index
+      // new AuthMiddleware(['/admin'])  // Ceci n'est pas nécessaire car la liste a été ajoutée en début du fichier index.php
     ]
   ],
   [
@@ -57,5 +55,35 @@ return [
       'id' => '\d+' // Le paramètre id doit être un nombre
     ],
     'middlewares' => []
+  ],
+  [
+    'path' => '/contact',
+    'controller' => ContactController::class,
+    'controllerMethod' => 'index',
+    'httpMethod' => 'GET',
+    'params' => [],
+    'middlewares' => [
+      // new AuthMiddleware(['/admin'])  // Ceci n'est pas nécessaire car la liste a été ajoutée en début du fichier index.php
+    ]
+  ],
+  [
+    'path' => '/contact-post',
+    'controller' => ContactController::class,
+    'controllerMethod' => 'submitContact',
+    'httpMethod' => 'POST',
+    'params' => [],
+    'middlewares' => [
+      // new AuthMiddleware(['/admin'])  // Ceci n'est pas nécessaire car la liste a été ajoutée en début du fichier index.php
+    ]
+  ],
+  [
+    'path' => '/contact-success',
+    'controller' => ContactController::class,
+    'controllerMethod' => 'contactSuccess',
+    'httpMethod' => 'GET',
+    'params' => [],
+    'middlewares' => [
+      // new AuthMiddleware(['/admin'])  // Ceci n'est pas nécessaire car la liste a été ajoutée en début du fichier index.php
+    ]
   ],
 ];
