@@ -34,5 +34,7 @@ Cette approche :
 
  # Middleware
 Dans cette version, nous ajoutons un middleware d'identification qui récupère un utilisateur dans un fichier config/users.json.
+ATTENTION, l'identification est gérée par le middleware AuthMiddleware.
+Soit l'utilisateur est déjà authentifié via la session, soit la requête est une soumission de formulaire de connexion et on vérifie simplement que les identifiants correspondent dans le fichier config/users.json
 C'est une première étape vers une authentification réelle en base de données avec login et mot de passe correctement crypté
 
