@@ -1,1 +1,0 @@
-Ajout d'un middleware que fait appel à une bd pour vérifier si l'utilisateur est identifié

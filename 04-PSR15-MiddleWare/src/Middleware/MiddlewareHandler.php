@@ -47,25 +47,26 @@ class MiddlewareHandler
    * @param ServerRequestInterface $request
    * @return ResponseInterface
    */
+  /**
+   * Exécute la pile de middlewares et le contrôleur final
+   *
+   * @param ServerRequestInterface $request
+   * @return ResponseInterface
+   */
   public function handle(ServerRequestInterface $request): ResponseInterface
   {
-    // Créer une fonction qui exécute le contrôleur final
-    $core = function (ServerRequestInterface $request) {
+    // Initialise la fonction finale (le contrôleur)
+    $next = function (ServerRequestInterface $request) {
       return call_user_func($this->controller, $request);
     };
 
-    // Envelopper chaque middleware autour du noyau, comme un oignon
-    $pipeline = array_reduce(
-      array_reverse($this->middlewares),
-      function ($next, MiddlewareInterface $middleware) {
-        return function (ServerRequestInterface $request) use ($middleware, $next) {
-          return $middleware->process($request, $next);
-        };
-      },
-      $core
-    );
-
-    // Exécuter le pipeline
-    return $pipeline($request);
+    // Enveloppe chaque middleware autour du contrôleur, du plus profond au plus externe
+    foreach (array_reverse($this->middlewares) as $middleware) {
+      $next = function (ServerRequestInterface $request) use ($middleware, $next) {
+        return $middleware->process($request, $next);
+      };
+    }
+    // Exécute la chaîne complète
+    return $next($request);
   }
 }

@@ -61,7 +61,11 @@ class InputSanitizerMiddleware implements MiddlewareInterface
       ->withParsedBody($parsedBody);
 
     // Passer au middleware suivant avec la requête nettoyée
-    return $next($sanitizedRequest);
+    $response = $next($sanitizedRequest);
+
+    // Modifier la réponse pour démontrer la structure en "oignon"
+    //return $response->withHeader('X-Sanitizer-Applied', 'true');
+    return $response;
   }
 
   /**
